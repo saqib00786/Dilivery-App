@@ -34,7 +34,7 @@ const HomeHeader = () => {
           <MagnifyingGlassIcon size={30} color="gray" />
           <TextInput placeholder="Search" />
         </View>
-        <AdjustmentsVerticalIcon size={30} color="#00ccbb" />
+        <AdjustmentsHorizontalIcon size={30} color="#00ccbb" />
       </View>
     </View>
   );

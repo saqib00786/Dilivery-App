@@ -1,11 +1,18 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import HomeHeader from "../../components/HomeHeader";
 import Categories from "../../components/Categories";
 import FeaturedRow from "../../components/FeaturedRow";
+import sanityClient from "../../sanity.js";
 
 const HomeScreen = () => {
+  const [featuredCategories, setFeaturedCategories] = useState([]);
+  console.log(
+    "🚀 ~ file: HomeScreen.js:11 ~ HomeScreen ~ featuredCategories",
+    featuredCategories
+  );
+
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -13,27 +20,37 @@ const HomeScreen = () => {
     });
   }, []);
 
+  useEffect(() => {
+    sanityClient
+      .fetch(
+        `*[_type == "featured"]{
+        ...,
+        restaurants->{
+          ...,
+          dishes->
+        }
+      }`
+      )
+      .then((data) => setFeaturedCategories(data));
+  }, []);
+
   return (
-    <View className='bg-gray'>
+    <View className="bg-gray">
       <HomeHeader />
       <ScrollView>
         {/* Categories */}
         <Categories />
-        <FeaturedRow
-          id={1}
-          text="Featured Foods"
-          description="Discover the best foods from around the world"
-        />
-        <FeaturedRow
-          id={1}
-          text="Tasty Discounts"
-          description="Everyday discounts on your favorite foods"
-        />
-        <FeaturedRow
-          id={1}
-          text="Offers Near You"
-          description="Find the best offers near you"
-        />
+
+        {featuredCategories.map((category) => {
+          return (
+            <FeaturedRow
+              key={category._id}
+              id={category._id}
+              text={category.name}
+              description={category.short_description}
+            />
+          );
+        })}
       </ScrollView>
     </View>
   );

@@ -1,12 +1,37 @@
 import { View, Text, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArrowLongRightIcon,
   ArrowRightCircleIcon,
 } from "react-native-heroicons/outline";
 import RestaurantCards from "./RestaurantCards";
+import sanityClient ,{urlFor}from "../sanity";
 
 const FeaturedRow = ({ id, text, description }) => {
+  const [restaurants, setRestaurants] = useState([]);
+  // console.log(
+  //   "🚀 ~ file: FeaturedRow.js:12 ~ FeaturedRow ~ restaurants",
+  //   restaurants
+  // );
+  useEffect(() => {
+    sanityClient
+      .fetch(
+        `
+    *[_type == "featured" && _id == $id]{
+      ...,
+      restaurant[]->{
+        ...,
+        dishes[]->,
+        type->{
+          name
+        }
+      },
+      }[0]`,
+        { id }
+      )
+      .then((data) => setRestaurants(data?.restaurant));
+  }, []);
+
   return (
     <View>
       <View className="flex-row justify-between px-4 items-center mt-4">
@@ -23,42 +48,23 @@ const FeaturedRow = ({ id, text, description }) => {
           paddingHorizontal: 15,
         }}
       >
-        <RestaurantCards
-          id={1}
-          imageUrl="https://thumbs.dreamstime.com/z/knife-ham-3229445.jpg"
-          title="Thai Food"
-          rating={4.5}
-          genre="Thai"
-          address="1234 Main Street what is the name"
-          short_description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do."
-          dishes="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sedut labore et dolore magna aliqua."
-          long={-122.4194}
-          lat={37.7749}
-        />
-        <RestaurantCards
-          id={1}
-          imageUrl="https://thumbs.dreamstime.com/z/knife-ham-3229445.jpg"
-          title="Thai Food"
-          rating={4.5}
-          genre="Thai"
-          address="1234 Main Street what is the name"
-          short_description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do."
-          dishes="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sedut labore et dolore magna aliqua."
-          long={-122.4194}
-          lat={37.7749}
-        />
-        <RestaurantCards
-          id={1}
-          imageUrl="https://thumbs.dreamstime.com/z/knife-ham-3229445.jpg"
-          title="Thai Food"
-          rating={4.5}
-          genre="Thai"
-          address="1234 Main Street what is the name"
-          short_description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do."
-          dishes="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sedut labore et dolore magna aliqua."
-          long={-122.4194}
-          lat={37.7749}
-        />
+        {restaurants.map((restaurant) => {
+          return (
+            <RestaurantCards
+              key={restaurant._id}
+              id={restaurant._id}
+              imageUrl={urlFor(restaurant.image.asset._ref).url()}
+              title={restaurant.name}
+              rating={restaurant.rating}
+              genre={restaurant?.type.name}
+              address={restaurant.address}
+              short_description={restaurant.short_description}
+              dishes={restaurant.dishes}
+              long={restaurant.long}
+              lat={restaurant.lat}
+            />
+          );
+        })}
       </ScrollView>
     </View>
   );
