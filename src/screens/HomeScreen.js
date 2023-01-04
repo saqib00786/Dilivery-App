@@ -35,7 +35,7 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <View className="bg-gray">
+    <View className="bg-gray flex-1 mb-4">
       <HomeHeader />
       <ScrollView>
         {/* Categories */}
