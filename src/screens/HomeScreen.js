@@ -8,10 +8,6 @@ import sanityClient from "../../sanity.js";
 
 const HomeScreen = () => {
   const [featuredCategories, setFeaturedCategories] = useState([]);
-  console.log(
-    "🚀 ~ file: HomeScreen.js:11 ~ HomeScreen ~ featuredCategories",
-    featuredCategories
-  );
 
   const navigation = useNavigation();
   useLayoutEffect(() => {

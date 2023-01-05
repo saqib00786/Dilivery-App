@@ -124,7 +124,9 @@ const BasketScreen = ({ navigation }) => {
         </View>
 
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate("PreparingOrderScreen");
+          }}
           disabled={!total}
           className={`rounded ${
             total ? "bg-green-500" : "bg-gray-500"

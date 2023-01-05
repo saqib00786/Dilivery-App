@@ -9,10 +9,6 @@ import sanityClient ,{urlFor}from "../sanity";
 
 const FeaturedRow = ({ id, text, description }) => {
   const [restaurants, setRestaurants] = useState([]);
-  // console.log(
-  //   "🚀 ~ file: FeaturedRow.js:12 ~ FeaturedRow ~ restaurants",
-  //   restaurants
-  // );
   useEffect(() => {
     sanityClient
       .fetch(
