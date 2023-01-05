@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
 import RestaurantScreen from "../screens/RestaurantScreen";
 import BasketScreen from "../screens/BasketScreen";
@@ -18,9 +18,12 @@ const Navigation = () => {
         </Stack.Group>
         <Stack.Group screenOptions={{ presentation: "modal" }}>
           <Stack.Screen
-            name="Basket"
+            name="BasketScreen"
             component={BasketScreen}
-            options={{headerShown: false, presentation : 'containedTransparentModal'}}
+            options={{
+              headerShown: false,
+              presentation: "containedTransparentModal",
+            }}
           />
         </Stack.Group>
       </Stack.Navigator>

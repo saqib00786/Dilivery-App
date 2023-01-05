@@ -8,10 +8,12 @@ const BasketComp = () => {
   const basketItems = useSelector(selectBasketItem);
   const navigation = useNavigation();
   const basketTotal = useSelector(selectBasketTotal);
+
+  if(basketItems.length === 0) return null
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("Basket");
+        navigation.navigate("BasketScreen");
       }}
       className={`absolute bottom-6 w-[90%] 
     self-center mx-4 p-4 rounded-lg bg-[#00ccbb] z-50`}

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import {
   ArrowLeftCircleIcon,
   ArrowLeftIcon,
@@ -18,6 +18,8 @@ import { MapPinIcon, StarIcon } from "react-native-heroicons/solid";
 import DishRow from "../../components/DishRow";
 import { urlFor } from "../../sanity";
 import BasketComp from "../../components/BasketComp";
+import { useDispatch } from "react-redux";
+import { setRestaurant } from "../../features/RestaurantSlice";
 
 const RestaurantScreen = ({ route, navigation }) => {
   let {
@@ -32,6 +34,25 @@ const RestaurantScreen = ({ route, navigation }) => {
     long,
     lat,
   } = route.params;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      setRestaurant({
+        id,
+        imageUrl,
+        title, 
+        rating,
+        genre,
+        address,
+        short_description,
+        dishes,
+        long,
+        lat,
+      })
+    );
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -88,9 +109,9 @@ const RestaurantScreen = ({ route, navigation }) => {
             <ChevronRightIcon size={24} color="#00ccbb" />
           </TouchableOpacity>
         </View>
-        <View className='pb-24'>
+        <View className="pb-24">
           <Text className="px-4 pt-4 mb-3 font-bold text-xl">Menu</Text>
-          
+
           {dishes.map((dish) => (
             <DishRow
               key={dish._id}
